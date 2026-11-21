@@ -2,7 +2,7 @@
 
 ## What this is
 
-Teams that build on AI models need a way to answer a simple question: is the model getting our tasks right? This guide shows how to build a small scorecard that answers it.
+Teams that build on AI models need a way to answer a simple question: Is the model getting our tasks right? This guide shows how to build a small scorecard that answers it.
 
 You give a model a set of tasks, save its answers and score each answer against rules you write in advance. The rules don't change between runs. So when the score moves, you know the model or your instructions caused it.
 
