@@ -1,0 +1,9 @@
+task_id,prompt,must_include,must_not_include
+T01,"Write a short Python script that sends one message to Claude with the Anthropic SDK and prints the reply.",messages.create,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T02,"Write Python that streams a Claude response with the Anthropic SDK and prints the text as it arrives.",messages.stream|stream=True;text_stream|content_block_delta,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T03,"Write Python that calls Claude with a system prompt telling it to answer in one sentence.",system=,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T04,"Write Python that gives Claude one tool, get_weather, and handles a tool_use response by returning a fake result.",tools=;input_schema;tool_use;tool_result,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T05,"Write Python for a two-turn conversation with Claude that keeps the first reply in the message history.",assistant;messages.create,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T06,"Write Python that counts the tokens in a prompt before sending it to Claude.",count_tokens,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T07,"Write Python that caches a long system prompt with Claude prompt caching.",cache_control,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
+T08,"Write Python that retries a Claude API call when it hits a rate limit.",RateLimitError|max_retries,claude-sonnet-4-5;claude-sonnet-4-2025;claude-3-
