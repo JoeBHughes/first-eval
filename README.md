@@ -26,7 +26,7 @@ This approach comes from a larger audit of 240 Claude answers to 30 coding tasks
 You need Python 3.9 or later.
 
 ```bash
-git clone https://github.com/<your-account>/first-eval.git
+git clone https://github.com/JoeBHughes/first-eval.git
 cd first-eval
 pip install anthropic
 ```
