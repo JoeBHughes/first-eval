@@ -1,25 +1,38 @@
-# Write your first eval in 30 minutes
+# Measure how well an AI model writes code, in 30 minutes
 
-An eval tells you how often a model gets a task right. This tutorial walks you through a small one that tests how well a Claude model writes Claude API code. You'll write tasks, collect answers, score them with fixed rules and compare two runs.
+## What this is
+
+Teams that build on AI models need a way to answer a simple question: is the model getting our tasks right? This guide shows how to build a small scorecard that answers it.
+
+You give a model a set of tasks, save its answers and score each answer against rules you write in advance. The rules don't change between runs. So when the score moves, you know the model or your instructions caused it.
+
+The example here tests how well Claude writes code for Anthropic's own API. The same approach works for any task with a checkable answer, such as support replies that must link the right article or summaries that must mention a required term.
 
 Independent project by Joe Hughes. Anthropic has not reviewed or endorsed this project.
 
-## What you'll build
+## Who this is for
+
+- Managers and admins can read this section and "Why fixed rules come first" to see what the scorecard measures and why the numbers hold up.
+- Developers can follow the six steps below. They take about 30 minutes, and the first two cost nothing.
+
+## Why fixed rules come first
+
+Someone has to decide whether each answer is right. You could ask a second AI model to judge, but that judge can change its mind between runs. Start with rules a script can check the same way every time, such as "the code has no syntax errors" or "the code calls `count_tokens`." When the score changes, you know the model or your instructions changed.
+
+This approach comes from a larger audit of 240 Claude answers to 30 coding tasks. In that audit, an automated script found that 108 of 114 answers written without web search (95%) named a model Anthropic no longer offered. A rule as simple as "doesn't contain an old model name" caught it.
+
+## How the steps fit together
+
+The rest of this guide is hands-on. You'll run two short Python scripts. One sends your tasks to a model and saves the answers. The other scores those answers against your rules.
 
 | Step | Time | What happens |
 |---|---|---|
 | 1. Set up | 5 minutes | Download the kit and install two packages |
 | 2. Score the practice answers | 5 minutes | Run the scorer with no API key, to see how it works |
 | 3. Write your own tasks | 5 minutes | Edit `tasks.csv` |
-| 4. Collect answers | 5 minutes | An automated script sends each task to a model |
+| 4. Collect answers | 5 minutes | A script sends each task to a model |
 | 5. Score and read the results | 5 minutes | The scorer applies the same rules to every answer |
 | 6. Change one thing and compare | 5 minutes | Run again and see what moved |
-
-## Why fixed rules come first
-
-An eval needs a grader. You can use another model as the grader, but start with rules a script can check, such as "the code has no syntax errors" or "the code calls `count_tokens`." Fixed rules give the same answer every time. When a score changes, you know the model or your prompt changed.
-
-This approach comes from a larger audit of 240 Claude answers to 30 coding tasks. In that audit, an automated script found that 108 of 114 answers written without web search (95%) named a model the Models API no longer listed. A rule as simple as "doesn't contain an old model ID" caught it.
 
 ## 1. Set up
 
@@ -37,7 +50,7 @@ No Git? On the repository page, click **Code**, then **Download ZIP**. Unzip it 
 
 The `sample` folder holds two practice answer files written for this tutorial. They aren't real model output. They let you see the scorer work before you spend anything on API calls.
 
-Answer files use JSONL format: one answer per line, written in JSON.
+Each answer file holds one answer per line, written in JSON. The file extension for that format is `.jsonl`.
 
 ```bash
 python score.py sample/answers_a.jsonl sample/answers_b.jsonl
@@ -81,7 +94,7 @@ Write rules for what a correct answer must do. Avoid rules about style, because 
 
 ## 4. Collect answers
 
-Set your API key, then check the plan with a dry run. The dry run lists the calls without making them.
+Set your API key, then check the plan with a dry run. A dry run lists the calls the script would make, without making them.
 
 ```bash
 export ANTHROPIC_API_KEY=...        # PowerShell: $env:ANTHROPIC_API_KEY = Read-Host "Key"
@@ -94,7 +107,7 @@ Then run it for real:
 python run_eval.py --model claude-sonnet-5-5 --out answers_a.jsonl
 ```
 
-Use a model ID that the Models API lists today. The script asks for two answers per task by default, because a model can answer the same prompt differently. Change that number with `--samples`. The script refuses to make more than 40 calls unless you add `--yes`.
+Use a model ID that Anthropic's Models API lists today. The script asks for two answers per task by default, because a model can answer the same prompt differently. Change that number with `--samples`. The script refuses to make more than 40 calls unless you add `--yes`.
 
 ## 5. Score and read the results
 
@@ -128,13 +141,13 @@ Fixed rules check text. They can't check behavior. Practice answer T08 catches `
 When you find an answer like that, you have two choices:
 
 - Tighten the rule. For T08, require a loop or the SDK's `max_retries` setting.
-- Add a second grader for judgments rules can't make, such as "does this code retry?" Use a different model as that grader, and have a human reviewer check a sample of its scores.
+- Add a second scorer for judgments rules can't make, such as "does this code retry?" Use a different model as that scorer, and have a human reviewer check a sample of its scores.
 
 ## Where to go next
 
 - Ask for more answers per task. With two answers, one bad answer moves a task's score by half.
 - Add web search or tools to `run_eval.py`, then compare runs with and without them.
-- Run the eval on a schedule, so you see when a new model or a docs change moves the score.
+- Run the scorecard on a schedule, so you see when a new model or a docs change moves the score.
 
 ## Files
 
